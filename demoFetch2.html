@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Fetch</title>
+  <style>
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  th {
+    background-color: #222;
+    color: white;
+    padding: 14px;
+    text-align: left;
+  }
+  td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+  }
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+  td img {
+    display: block;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+  </style>
+  <script>
+    async function convert(amount) {
+      const converturl="https://open.er-api.com/v6/latest/USD";
+      try {
+        const res=await fetch(converturl);
+        const data=await res.json();
+        const converted=amount*(data.rates.INR);
+        return converted;
+      } catch (error) {
+        console.log("error occured from convert function",error);
+      } 
+    }
+    async function productsDetail() {
+      const url = 'https://dummyjson.com/products?limit=10&skip=5'
+      try {
+        let response = await fetch(url);
+        // console.log(response);
+        let data = await response.json();
+
+        const currencyResponse =
+      await fetch("https://open.er-api.com/v6/latest/USD");
+
+    const currencyData = await currencyResponse.json();
+
+    const usdToInr = currencyData.rates.INR;
+
+        let rows="";
+        // console.log(data.products);
+        
+        data.products.forEach((i, index) => {
+          const inrprice = i.price * usdToInr;
+
+          rows += `
+          <tr>
+             
+            <td>${index+1}</td>
+            <td>${i.title}</td>
+            <td><img src="${i.images[0]}" width="50" height="50"></td>
+            <td>${i.category}</td>
+            <td>${i.rating}</td>
+            <td>${i.price}</td>
+            <td>₹${inrprice.toFixed(2)}</td>
+            <td>${i.stock}</td>
+            <td>
+              <button>Add To Cart
+                </button>
+              </td>       
+            </tr>
+          `
+      })
+        const el=document.querySelector("tbody");
+        el.innerHTML=rows;
+      } catch (error) {
+        console.log("error :", error);
+      }
+      
+    }
+    productsDetail() ;
+  </script>
+</head>
+
+<body>
+  <select id="fromCurrency">
+  <option value="INR">INR</option>
+  <option value="USD">USD</option>
+  <option value="EUR">EUR</option>
+  <option value="GBP">GBP</option>
+</select>
+  <table>
+    <thead>
+      <tr>
+        <th>Sr.no</th>
+        <th>Title</th>
+        <th>images</th>
+        <th>category</th>
+        <th>rating</th>
+        <th>price</th>
+        <th>price in inr</th>
+        <th>stock</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</body>
+</html>
