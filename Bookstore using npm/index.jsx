@@ -1,0 +1,7 @@
+import ReactDOM from 'react-dom';
+import App from './App';
+
+const parent =document.getElementById("root");
+const root=ReactDOM.createRoot(parent);
+
+root.render(<App/>);
