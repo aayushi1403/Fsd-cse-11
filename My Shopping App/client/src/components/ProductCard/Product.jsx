@@ -5,7 +5,7 @@ function Product() {
    const [response, setResponse] = useState([]);
 
   async function fetchUserData() {
-    const url = "https://dummyjson.com/products";
+    const url = "https://dummyjson.com/products?limit=12";
 
     try {
       const res = await fetch(url);
@@ -27,7 +27,7 @@ function Product() {
     fetchUserData();
   
   return (
-    <div className='flex flex-wrap gap-2'>
+    <div className='flex flex-wrap gap-2 mt-4'>
       {response.map((item)=>(<ProductCard key={item.id} props={item}/>))}
     </div>
   )
