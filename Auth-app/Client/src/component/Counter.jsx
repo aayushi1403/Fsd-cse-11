@@ -6,11 +6,10 @@ const Counter = () => {
   const renderCount=useRef(0)
   useEffect(()=>{
    setMessage(`updated Count=${count}`)
-   
+   renderCount.current+=1;
   },[count])
   function increment(){
     setCount(count+1);
-
   }
 function decrement(){
 setCount(count-1);
